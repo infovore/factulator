@@ -4,7 +4,7 @@ require 'rss/2.0'
 require 'rss/itunes'
 
 DB = Sequel.sqlite('factulator.db')
-podcasts = DB[:podcasts].all
+podcasts = DB[:podcasts].filter(:active => true).all
 
 author = "FACT magazine"
 
