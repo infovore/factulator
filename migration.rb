@@ -8,6 +8,7 @@ DB.create_table :podcasts do
   String :title, :null => false
   String :url, :null => false
   String :page_url, :null => false
+  Integer :file_size
   TrueClass :active, :default => true
   DateTime :created_at
   index :created_at
