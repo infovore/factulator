@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'rubygems'
 require 'uri'
 require 'nokogiri'
@@ -34,7 +36,7 @@ pages.each_with_index do |page, i|
   if mp3_links.any?
     mp3 = mp3_links.first
     title = mp3.inner_text.strip
-    desc = descs[i]
+    desc = descs[i].inner_text
     url = URI.encode(mp3.attr('href'))
 
     unless DB[:podcasts].where(:url => url).any?
