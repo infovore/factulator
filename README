@@ -1,0 +1,7 @@
+== Find links to FACT podcast MP3s
+
+* First, run migration.rb to create the database
+* Every day, run factulator.rb to update the database
+* Then, run podcast.rb to generate the podcast XML file
+* put the podcast file somewhere publicly accessible and subscribe to it in iTunes.
+
