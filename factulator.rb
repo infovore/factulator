@@ -33,10 +33,11 @@ pages.each do |page|
     title = mp3.inner_text.strip
     url = URI.encode(mp3.attr('href'))
 
-    response = Net::HTTP.get_response(URI.parse(url))
-    file_size = response['content-length']
-
     unless DB[:podcasts].where(:url => url).any?
+      # only get this if we're downloading a new podcast
+      response = Net::HTTP.get_response(URI.parse(url))
+      file_size = response['content-length']
+
       DB[:podcasts].insert(:title => title, :url => url, :page_url => page_url, :file_size => file_size)
     end
   end
