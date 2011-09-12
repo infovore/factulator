@@ -11,7 +11,7 @@ PATH_PREFIX = File.expand_path(File.dirname(__FILE__))
 DB = Sequel.sqlite(PATH_PREFIX + "/factulator.db")
 
 # first, go through all the existing podcasts and check they're still live
-podcasts = DB[:podcasts].all
+podcasts = DB[:podcasts].filter(:active => true).all
 podcasts.each do |podcast|
   doc = Nokogiri::HTML(open(podcast.page_url))
   mp3_links = page_doc.css("a").select {|link| link.attr("href").match("mp3.factmagazine.co.uk")}
