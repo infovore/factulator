@@ -3,7 +3,9 @@ require 'sequel'
 require 'rss/2.0'
 require 'rss/itunes'
 
-DB = Sequel.sqlite('factulator.db')
+PATH_PREFIX = File.expand_path(File.dirname(__FILE__))
+DB = Sequel.sqlite(PATH_PREFIX + "/factulator.db")
+
 podcasts = DB[:podcasts].filter(:active => true).all
 
 author = "FACT magazine"
@@ -21,6 +23,7 @@ channel.lastBuildDate = Time.now
 podcasts.each do |podcast|
   item = RSS::Rss::Channel::Item.new
   item.title = podcast[:title]
+  item.description = podcast[:description]
   link = podcast[:url]
   item.link = link
   item.guid = RSS::Rss::Channel::Item::Guid.new
@@ -37,4 +40,6 @@ podcasts.each do |podcast|
 
 rss.channel = channel
 
-puts rss.to_s
+File.open(PATH_PREFIX + "/fact_podcast.xml", "w") do |f|
+  f.write(rss.to_s)
+end
