@@ -48,18 +48,25 @@ pages.each_with_index do |page, i|
       #response = Net::HTTP.get_response(URI.parse(url))
       #file_size = response['content-length']
 
-      curl_output = `curl -I "#{url}"`
+      curl_output = `curl -I "#{url}"` rescue nil
       # so: split the curl output into an array, find the Content Length and
       # chuck out everything that's not a number, and store it as an int.
       # sorted.
       if curl_output && !curl_output.match("403 Forbidden") && !curl_output.match("resolve host")
-        file_size = curl_output.gsub(/\r/,"").split(/\n/).select {|f| f.match('Content-Length')}.first.gsub(/\D/, "").to_i
+        content_length_field = curl_output.gsub(/\r/,"").split(/\n/).select {|f| f.match('Content-Length')}.first
+        if content_length_field
+          file_size = content_length_field.gsub(/\D/, "").to_i
+        else
+          file_size = nil
+          active = false
+        end
       else
         file_size = nil
         active = false
       end
 
       DB[:podcasts].insert(:title => title, :description => desc, :url => url, :page_url => page_url, :file_size => file_size, :active => active)
+      puts "Saving this"
     end
   end
 end
