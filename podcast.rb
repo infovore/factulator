@@ -28,8 +28,7 @@ podcasts.each do |podcast|
   item.guid.isPermaLink = true
   item.pubDate = podcast[:created_at]
 
-  # file_size = podcast[:file_size]
-  file_size = 1
+  file_size = podcast[:file_size]
  
   item.enclosure = RSS::Rss::Channel::Item::Enclosure.new(item.link, file_size, 'audio/mpeg')     
   channel.items << item
